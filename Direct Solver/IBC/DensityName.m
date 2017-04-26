@@ -9,6 +9,10 @@ case 3
 	nm = 'Shifted-Gaussian';
 case 4
 	nm = 'Gaussian-Heaviside';
-otherwise
+case 5
 	nm = 'Quartic';
+case 6
+	nm = 'AG'; % Inverse solver only.
+otherwise
+	nm = 'Truncated-Gaussian';
 end

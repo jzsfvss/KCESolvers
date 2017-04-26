@@ -9,6 +9,8 @@ case 3
 	den = D03_ShiftedGaussian(x);
 case 4
 	den = D04_GaussianHeaviside(x);
-otherwise
+case 5
 	den = D05_Quartic(x);
+otherwise
+	den = D07_TrGaussian(x);
 end

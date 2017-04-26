@@ -1,5 +1,13 @@
 function [ u, t, x, st, sx ] = DirSolver(mth1, mth2, ptp, I, J)
 
+global kppars
+
+% Initialize kppars if it does not exist:
+ncs = 2 + 4*(3 - (mth1 == 2));
+if (size(kppars, 2) ~= ncs)
+	kppars = zeros(1, ncs);
+end
+
 switch (mth1)
 
 case 1 % Standard KCE:
