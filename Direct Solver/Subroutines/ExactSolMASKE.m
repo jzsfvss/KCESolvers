@@ -53,6 +53,11 @@ mu = v(1)*ti-xj;
 eta = xj-v(2)*ti;
 sig = ti*mpsi-xj*phi;
 
+ptpch = 0;
+if (ptp == 7)
+	ptp = 2;
+	ptpch = 1;
+end
 ic = mIC(xj-vA*ti, ptp);
 icA = ic(1);
 ic = mIC(xj-vC*ti, ptp);
@@ -75,4 +80,8 @@ if (i == 50)
 	disp(['Estimated runtime = ', num2str(ceil(I*t2)), ' secs = ', num2str(MyRound(I*t2/60, 2)), ' mins.']);
 end
 
+end
+
+if (ptpch)
+	ptp = 7;
 end
