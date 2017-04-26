@@ -1,4 +1,4 @@
-function se = SolExporter(eopt, plt, mth1, fnm, pnm, psnm, I, sx, u, u1, u2)
+function se = SolExporter(eopt, plt, mth1, fnm, pnm, I, sx, u, u1, u2)
 
 if (exist([ pwd, '\Exports']) == 0)
 	system('mkdir Exports');
@@ -14,11 +14,11 @@ end
 tmpmtx = zeros(sz(2), sz(3));
 
 if (mth1 == 2)
-	nm = [ psnm, '_MASKE' ];
+	nm = 'MASKE';
 	snm = [ 'L', 'C' ];
 	itn = 2;
 else
-	nm = [ psnm, '_SimNECEEM' ];
+	nm = 'SimNECEEM';
 	snm = [ 'L', 'T', 'C' ];
 	itn = 3;
 end
@@ -55,11 +55,11 @@ end
 else % Export the solution at the detector only.
 
 if (mth1 == 2)
-	nm = [ psnm, '_MASKE' ];
+	nm = 'MASKE';
 	snm = [ 'L', 'C' ];
 	itn = 2;
 else
-	nm = [ psnm, '_SimNECEEM' ];
+	nm = 'SimNECEEM';
 	snm = [ 'L', 'T', 'C' ];
 	itn = 3;
 end

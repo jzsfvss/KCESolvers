@@ -4,7 +4,7 @@
 % Author			József Vass <jvass@yorku.ca>
 % Employer			Sergey N. Krylov <skrylov@yorku.ca>
 % Institution		York University
-% Version date		March 10, 2017
+% Version date		October 5, 2016
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 %__________________________________________________________________________________________
 % Global constants
@@ -102,7 +102,7 @@ else
 end
 
 % File name:
-fnm = [ psnm, '_', MethodName(mth2+2), '_', pnm, '_', num2str(I), 'x', num2str(sx) ];
+fnm = [ MethodName(mth2+2), '_', pnm, '_', num2str(I), 'x', num2str(sx) ];
 disp([ 'Solved tx-mesh size = ', num2str(I), 'x', num2str(sx) ]);
 
 end
@@ -157,9 +157,9 @@ else
 	numanal = 'Numerical';
 end
 if (mth1 == 2)
-	fnm = [ psnm, '_', 'MASKE_', numanal, '_', pnm, '_', num2str(I), 'x', num2str(sx) ];
+	fnm = [ 'MASKE_', numanal, '_', pnm, '_', num2str(I), 'x', num2str(sx) ];
 else
-	fnm = [ psnm, '_', 'SimNECEEM_', numanal, '_', pnm, '_', num2str(I), 'x', num2str(sx) ];
+	fnm = [ 'SimNECEEM_', numanal, '_', pnm, '_', num2str(I), 'x', num2str(sx) ];
 end
 disp([ 'Solved tx-mesh size = ', num2str(I), 'x', num2str(sx) ]);
 
@@ -235,9 +235,9 @@ sx = sx2;
 
 % File name:
 if (mth1 == 2)
-	fnm = [ psnm, '_', 'MASKE_Both_', pnm, '_', num2str(I), 'x', num2str(sx) ];
+	fnm = [ 'MASKE_Both_', pnm, '_', num2str(I), 'x', num2str(sx) ];
 else
-	fnm = [ psnm, '_', 'SimNECEEM_Both_', pnm, '_', num2str(I), 'x', num2str(sx) ];
+	fnm = [ 'SimNECEEM_Both_', pnm, '_', num2str(I), 'x', num2str(sx) ];
 end
 % disp([ 'Solved tx-mesh size = ', num2str(I), 'x', num2str(sx) ]);
 
@@ -276,9 +276,9 @@ if (sv == 1)
 end
 if (sv)
 	if (plt == 1)
-		SolExporter(eopt, plt, mth1, fnm, pnm, psnm, I, sx, u, u, u);
+		SolExporter(eopt, plt, mth1, fnm, pnm, I, sx, u, u, u);
 	else
-		SolExporter(eopt, plt, mth1, fnm, pnm, psnm, I, sx, u1, u1, u2);
+		SolExporter(eopt, plt, mth1, fnm, pnm, I, sx, u1, u1, u2);
 	end
 end
 

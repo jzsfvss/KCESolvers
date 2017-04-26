@@ -2,9 +2,8 @@ function opt = OptSel(opts)
 
 nopt = max(size(opts))-1;
 dl = 1;
-mxlst = 4; % Max. no. of options listed horizontally.
 
-if (nopt <= mxlst)
+if (nopt <= 5)
 	sopt = [ opts{1, 1}, ': (1) ', opts{1, 2} ];
 	for k = 3:(nopt+1)
 		sopt = [ sopt, ', (', num2str(k-1), ') ', opts{1, k} ];
@@ -14,7 +13,7 @@ end
 
 while (dl)
 
-if (nopt <= mxlst)
+if (nopt <= 5)
 	disp(sopt);
 else
 	disp([ opts{1, 1}, ':' ]);
@@ -26,7 +25,7 @@ end
 opt = input('Selection = ');
 if (sum(opt == (1:nopt)) == 0)
 	disp('Improper selection! Please try again.');
-	if (nopt > mxlst)
+	if (nopt > 5)
 		disp(' ');
 	end
 else

@@ -30,11 +30,6 @@ C0 = u0(3);
 koff = k(2);
 
 % Initial condition:
-ptpch = 0;
-if (ptp == 7)
-	ptp = 2;
-	ptpch = 1;
-end
 for j = 1:(J+1)
 	ic = IC0(x(j), ptp);
 	u(1, 1, j) = ic(1);
@@ -97,8 +92,4 @@ for i = 2:(I+1)
 	end
 end
 
-end
-
-if (ptpch)
-	ptp = 7;
 end

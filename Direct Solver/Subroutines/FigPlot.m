@@ -1,11 +1,6 @@
 function plt2 = FigPlot(plt, mth1, mth2, u, u1, u2, t, x, t1, x1, t2, x2)
 
 % Linewidths and colors:
-%{
-lnw1 = 5; % exact / L, T, C
-lnw2 = 2; % numerical / L + C
-lnw3 = 2; % error
-%}
 lnw1 = 3; % exact / L, T, C
 lnw2 = 1.5; % numerical / L + C
 lnw3 = 1.5; % error
@@ -170,10 +165,7 @@ end
 
 % Setting background to transparent:
 set(gca, 'Color', 'None');
-set(gca, 'TickDir', 'out');
-glg = findobj(gcf, 'Type', 'axes', 'Tag', 'legend');
+glg = findobj(gcf,'Type','axes','Tag','legend');
 set(glg, 'Color', 'None');
-glg2 = findall(gcf, 'tag', 'legend');
-set(glg2, 'location', 'northeastoutside', 'Color', 'None');
 
 plt2 = 1;
