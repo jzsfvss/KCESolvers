@@ -33,6 +33,10 @@ case 14
 	oag = 7;
 case 15
 	oag = 8;
+case 16
+	oag = 9;
+case 17
+	oag = 10;
 otherwise
 	oag = 0;
 end
@@ -55,7 +59,7 @@ end
 % Optimization:
 if (ptp ~= 6) % Standard plugs.
 
-EF = @(k) Error(Metric, LpC0, relI, k, mth1, mth2, ptp, I, J)/mLpC0;
+EF = @(k) Error(Metric, LpC0, relI, k, mth1, mth2, ptp, I, J, 1)/mLpC0;
 if (iopt == 2)
 	[ k, Ek, convd ] = OptAlg_NelderMead(EF, kE, yeps, miter);
 else
@@ -71,9 +75,9 @@ if (mth1 ~= 2) % Standard methods.
 
 cT = kpparsest(7);
 sT = kpparsest(8:9);
-EF = @(kpp) Error(Metric, LpC0, relI, KPparsTrans(kpp, cT, sT), mth1, mth2, ptp, I, J)/mLpC0;
-optinds = [ 2, 3:6, 7, 11:14 ];
 
+EF = @(kpp) Error(Metric, LpC0, relI, KPparsTrans(kpp, cT, sT), mth1, mth2, ptp, I, J, 1)/mLpC0;
+optinds = [ 2, 3:6, 7, 11:14 ];
 sz = size(kE);
 lkE = sz(1);
 ykE = zeros(lkE, 1);
@@ -82,13 +86,27 @@ for i = 1:lkE
 end
 [ kpp, Ek, convd ] = OptAlgGen_Master(oag, EF, [ kE(:, optinds), ykE ], magfac, yeps, miter);
 
+if (convd == 0)
+
+EF = @(kpp) Error(Metric, LpC0, relI, KPparsTrans(kpp, cT, sT), mth1, mth2, ptp, I, J, 2)/mLpC0;
+optinds = [ 2, 3:6, 7, 11:14 ];
+sz = size(kE);
+lkE = sz(1);
+ykE = zeros(lkE, 1);
+for i = 1:lkE
+	ykE(i) = EF(kE(i, optinds));
+end
+[ kpp, Ek, convd ] = OptAlgGen_Master(oag, EF, [ kE(:, optinds), ykE ], magfac, yeps, miter);
+
+end
+
 kppars = KPparsTrans(kpp, cT, sT);
 kon = kppars(1);
 koff = kppars(2);
 
 else % MASKE.
 
-EF = @(kpp) Error(Metric, LpC0, relI, kpp, mth1, mth2, ptp, I, J)/mLpC0;
+EF = @(kpp) Error(Metric, LpC0, relI, kpp, mth1, mth2, ptp, I, J, 1)/mLpC0;
 [ kpp, Ek, convd ] = OptAlgGen_Master(oag, EF, kE, magfac, yeps, miter);
 kon = kpp(1);
 koff = kpp(2);

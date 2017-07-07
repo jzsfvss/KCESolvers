@@ -1,4 +1,4 @@
-function [ k, v, D, l, l2, ueq, ueq22, xmax, tmax, J, I, Lini, Tini, psnm ] = ParsFile(fnm, mth1, optdi)
+function [ k, v, D, l, l2, ueq, ueq22, xmax, tmax, J, I, Lini, Tini, psnm ] = ParsFile(fnm, mth1, optdi, varargin)
 
 % Importing:
 T = readtable([ pwd, '\', fnm ]);
@@ -6,8 +6,12 @@ sz = size(T);
 
 % Displaying:
 %disp(T(1:18, [1, 4:sz(2)]));
-disp(T(20:41, [1, 2, 4:sz(2)]));
-j = input('Select parameter set column number = ');
+if (length(varargin) == 0)
+	disp(T(20:41, [1, 2, 4:sz(2)]));
+	j = input('Select parameter set column number = ');
+else
+	j = varargin{1};
+end
 
 % Reading data:
 psnm = T.Properties.VariableNames{3+j};

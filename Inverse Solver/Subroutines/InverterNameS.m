@@ -26,9 +26,13 @@ case 11
 case 12
 	nm = 'HarmonySearch';
 case 13
-	nm = 'InteriorPointML';
+	nm = 'InteriorPointMLbfgs';
 case 14
 	nm = 'SequentialQuadraticML';
 case 15
 	nm = 'ActiveSetML';
+case 16
+	nm = 'ACD';
+case 17
+	nm = 'InteriorPointMLlbfgs';
 end

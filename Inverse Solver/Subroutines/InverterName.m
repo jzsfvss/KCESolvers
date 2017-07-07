@@ -26,9 +26,13 @@ case 11
 case 12
 	nm = 'Harmony Search';
 case 13
-	nm = 'Interior Point (MatLab)';
+	nm = 'Interior Point, BFGS (MatLab)';
 case 14
 	nm = 'Sequential Quadratic (MatLab)';
 case 15
 	nm = 'Active Set (MatLab)';
+case 16
+	nm = 'Adaptive Coordinate Descent';
+case 17
+	nm = 'Interior Point, LBFGS (MatLab)';
 end

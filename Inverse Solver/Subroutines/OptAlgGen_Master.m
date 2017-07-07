@@ -18,4 +18,8 @@ case 7
 	[ xopt, yopt, convd ] = OptAlgGen_FminconLogML(2, f, xy, magfac, yeps, miter);
 case 8
 	[ xopt, yopt, convd ] = OptAlgGen_FminconLogML(3, f, xy, magfac, yeps, miter);
+case 9
+	[ xopt, yopt, convd ] = OptAlgGen_ACDLog(f, xy, magfac, yeps, miter);
+case 10
+	[ xopt, yopt, convd ] = OptAlgGen_FminconLogML(4, f, xy, magfac, yeps, miter);
 end

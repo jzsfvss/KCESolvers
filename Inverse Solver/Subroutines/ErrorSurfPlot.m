@@ -5,6 +5,8 @@ global optstinds
 
 % Initialization:
 mrsz = 10; % Plot marker size.
+colb = [0 0 0]; % black
+colr = [1 0 0]; % red
 %pdg = 0.05; % Padding %.
 %pdg = 1.5;
 sz = size(krec);
@@ -50,8 +52,24 @@ loi = length(optstinds);
 optinds = [ optstinds, n+1 ];
 for i = 1:loi
 	optindsi = optinds(i):(optinds(i+1) - 1);
-	plot([ x0, x(1), x(optindsi)' ], [ y0, y(1), y(optindsi)' ], 'k-');
-	plot([ x(1), x(optindsi)' ], [ y(1), y(optindsi)' ], 'k.', 'Markersize', mrsz);
+	lni = plot([ x0, x(1) ], [ y0, y(1) ], '-', 'Color', 0.95*colb + 0.05*colr);
+	lni.Color(4) = 0.3;
+	plot([ x(1) ], [ y(1) ], 'k.', 'Markersize', mrsz);
+	x1 = x(1);
+	y1 = y(1);
+	x2 = x(optindsi(1));
+	y2 = y(optindsi(1));
+	N = length(optindsi);
+	for j = 1:(N-1)
+		lam = 0.05 + (0.95/(N - 1))*(j - 1);
+		lni = plot([ x1, x2 ], [ y1, y2 ], '-', 'Color', (1 - lam)*colb + lam*colr);
+		lni.Color(4) = 0.3;
+		plot(x1, y1, 'k.', 'Markersize', mrsz);
+		x1 = x2;
+		y1 = y2;
+		x2 = x(optindsi(j+1));
+		y2 = y(optindsi(j+1));
+	end
 end
 
 % Extreme point:

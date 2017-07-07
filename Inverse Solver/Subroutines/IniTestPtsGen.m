@@ -7,7 +7,7 @@ n = 0;
 kpl = length(kppars1);
 kon1 = kppars1(1);
 koff1 = kppars1(2);
-EF = @(k) Error(Metric, LpC0, relI, k, mth1, mth2, ptp, I, J)/mLpC0;
+EF = @(k) Error(Metric, LpC0, relI, k, mth1, mth2, ptp, I, J, 1)/mLpC0;
 ef = EF(kppars1);
 
 for n = 1:ntry

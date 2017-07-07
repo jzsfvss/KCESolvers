@@ -6,7 +6,7 @@ global mLpC0
 % Initialization:
 if (ptp ~= 6) % Standard plugs.
 
-EF = @(k) Error(Metric, LpC0, relI, k, mth1, mth2, ptp, I, J)/mLpC0;
+EF = @(k) Error(Metric, LpC0, relI, k, mth1, mth2, ptp, I, J, 0)/mLpC0;
 k0 = kpp0(1:2);
 kppcon = []; % Constant part.
 
@@ -15,11 +15,11 @@ else % AG plug.
 if (mth1 ~= 2) % Standard methods.
 	cT = kpparsest(7);
 	sT = kpparsest(8:9);
-	EF = @(kpp) Error(Metric, LpC0, relI, KPparsTrans(kpp, cT, sT), mth1, mth2, ptp, I, J)/mLpC0;
+	EF = @(kpp) Error(Metric, LpC0, relI, KPparsTrans(kpp, cT, sT), mth1, mth2, ptp, I, J, 0)/mLpC0;
 	k0 = kpp0(2);
 	kppcon = kpp0([ 3:6, 7, 11:14 ]);
 else % MASKE.
-	EF = @(kpp) Error(Metric, LpC0, relI, kpp, mth1, mth2, ptp, I, J)/mLpC0;
+	EF = @(kpp) Error(Metric, LpC0, relI, kpp, mth1, mth2, ptp, I, J, 0)/mLpC0;
 	k0 = kpp0(1:2);
 	kppcon = kpp0(3:length(kpp0));
 end	 % if 2
@@ -33,7 +33,7 @@ lk0 = length(k0);
 for k = 1:numtst
 
 % Signal error:
-k1 = k0.*(magfac^normrnd(0, 1, 1, lk0));
+k1 = k0.*(magfac.^normrnd(0, 1, 1, lk0));
 kpp1 = [ k1, kppcon ];
 E1 = EF(kpp1);
 

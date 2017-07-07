@@ -1,10 +1,11 @@
+function res = InvSolAna()
 %__________________________________________________________________________________________
-% Program name		KCE Inverse Solver
+% Program name		KCE Inverse Solver Analysis
 % Language			MatLab
 % Author			József Vass <jvass@yorku.ca>
 % Employer			Sergey N. Krylov <skrylov@yorku.ca>
 % Institution		York University
-% Version date		July 7, 2017
+% Version date		June 8, 2017
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 %__________________________________________________________________________________________
 % Global constants
@@ -42,16 +43,44 @@ global rIlp % Left peak indices (C).
 global rIbr % Bridge between the peaks.
 global rIrp % Right peak indices (L).
 %__________________________________________________________________________________________
+% Grand loop
+%‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+% BigPars = parameter column.
+% BigI = time divisions.
+% srrerr = signal relative error.
+% parcoll = pararmeters collected.
+
+parcoll = [];
+
+for BigPars = 1:12
+for srrerrpow = 0:0.5:4
+
+srrerr = 10^(-srrerrpow);
+BigI = 300;
+cntcoll = [ BigPars, BigI, srrerr ];
+disp([ '[ pars, I, rerr ] = [ ', num2str(cntcoll(1)), ', ', num2str(cntcoll(2)), ', ', num2str(cntcoll(3), '%.2E'), ' ]' ]);
+
+%{
+for BigPars = 1:9
+for BigI = 300:50:750
+%BigPars = 8;
+srrerr = 1E-4;
+cntcoll = [ BigPars, BigI, srrerr ];
+disp([ '[ pars, I, rerr ] = [ ', num2str(cntcoll(1)), ', ', num2str(cntcoll(2)), ', ', num2str(cntcoll(3), '%.2E'), ' ]' ]);
+%}
+%__________________________________________________________________________________________
 % Method selection
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+%{
 disp(' ');
 disp('Inverse Solver for Kinetic Capillary Electrophoresis');
 
-srrerr = 1E-4; % Rel. error threshold that the inverter should reach (in %).
-
 disp(' ');
-invfe = OptSel({'Inversion', 'Arbitrary accuracy', 'Estimates only', 'Estimation test', 'Solver analysis'});
+%}
+%invfe = OptSel({'Inversion', 'Arbitrary accuracy', 'Estimates only', 'Estimation test'});
+invfe = 1;
 
+%{
 if (invfe == 3)
 	res = InitializerTest();
 	disp(' ');
@@ -59,16 +88,8 @@ if (invfe == 3)
 	disp(' ');
 	return
 end
-
-if (invfe == 4)
-	disp(' ');
-	res = InvSolAna();
-	disp(' ');
-	disp('Finished.')
-	disp(' ');
-	return
-end
-
+%}
+%{
 if (invfe == 1)
 	disp(' ');
 	[ mth1, mth2, ptp ] = Method(2);
@@ -77,13 +98,20 @@ else
 	mth2 = 1;
 	ptp = 6;
 end	
+%}
+mth1 = 1;
+mth2 = 1;
+ptp = 6;
 
+%{
 if (invfe == 1)
 	disp(' ');
 	mopt = OptSel({'Metric', 'L2', 'Maximum', 'Exp L2'});
 else
 	mopt = 1;
 end
+%}
+mopt = 1;
 Metric = MetricFun(mopt);
 
 %ioptvec = [ 2, 4, 3, 5, 6, 7, 8, 9 ];
@@ -101,12 +129,15 @@ ioptvecc{2} = 'All';
 for n = 1:ioptvecl
 	ioptvecc{2 + n} = InverterName(ioptvec(n));
 end
+%{
 if (invfe == 1)
 	disp(' ');
 	iopt = OptSel(ioptvecc);
 else
 	iopt = 2;
 end
+%}
+iopt = 2;
 ioptvec2 = [ 1, ioptvec ];
 ioptnm = InverterNameS(ioptvec2(iopt));
 if (iopt > 1)
@@ -119,14 +150,18 @@ gI2 = [ 1, 2, 4, 9, 12 ]; % Inverters that require initial test points to be gen
 %__________________________________________________________________________________________
 % Target signal generation / reading from file
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-disp(' ');
-mtht = OptSel({'Test signal', 'Generate', 'File' });
+%disp(' ');
+%mtht = OptSel({'Test signal', 'Generate', 'File' });
+mtht = 1;
+
 if (mtht == 1) % Generated target signal.
 
+%{
 disp(' ');
-disp('Select test parameter set:');
+%disp('Select test parameter set:');
 disp(' ');
-[ k, v, D, l, l2, u0, u022, xmax, tmax, J, I, Lini, Tini, psnm ] = ParsFile('../Direct Solver/parameters.xls', mth1, 2);
+%}
+[ k, v, D, l, l2, u0, u022, xmax, tmax, J, I, Lini, Tini, psnm ] = ParsFile('../Direct Solver/parameters.xls', mth1, 2, BigPars);
 kon0 = k(1);
 koff0 = k(2);
 
@@ -150,8 +185,9 @@ if (ptp == 6) % Asym. G. plug.
 end
 
 if (I == 0)
-	disp(' ');
-	I = input('Mesh divisions in t = ');
+	%disp(' ');
+	%I = input('Mesh divisions in t = ');
+	I = BigI;
 	% J = input('Mesh divisions in x = ');
 	J = 1;
 end
@@ -204,6 +240,7 @@ ptit = [ 'Parameter set: ', psnm, ';  ' ];
 I = sum(LpC0 ~= 0) - 1;
 LpC0 = LpC0(1:(I+1));
 %}
+
 sz = size(find(isnan(LpC0)));
 if (prod(sz) == 0)
 	msszall = max(size(LpC0all));
@@ -234,11 +271,14 @@ ritol = 0.01;
 if (ptp ~= 6) % Non-AG plug.
 
 disp(' ');
+%{
 if (invfe == 1)
 	rIopt = OptSel({'Signal portion to invert', 'All', 'Bridge'});
 else
 	rIopt = 1;
 end
+%}
+rIopt = 1;
 
 switch (rIopt)
 case 1
@@ -256,6 +296,7 @@ end
 
 mLpC0 = Metric(LpC0(relI), 0*LpC0(relI));
 
+%{
 if (invfe == 1) % if 1
 if (iopt == 1) % if 2
 	ropts = 1;
@@ -265,16 +306,18 @@ else
 	ropts = OptSel({'Runtime options', 'Default', 'Enter'});
 end % if 2
 end % if 1
+%}
+ropts = 1;
 %__________________________________________________________________________________________
 % Initial estimate
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 %if (ptp == 6)
 %	kppars = InitializerAGP(LpC0, rI, rIlp, rIbr, rIrp, ptp, mth1);
 %end
-disp(' ');
+%disp(' ');
 if (ptp == 6)
 	%disp('Initializing the asymmetric Gaussian plug parameters for optimization...');
-	disp('Estimating k_on, k_off and the asymmetric Gaussian plug parameters...');
+%	disp('Estimating k_on, k_off and the asymmetric Gaussian plug parameters...');
 	l1 = l;
 	l = l0;
 else
@@ -288,6 +331,7 @@ if (invfe == 2)
 
 [ kon1a, koff1a ] = InitializerArea(LpC0);
 
+%{
 disp(' ');
 disp('Kinetic rate constants:');
 ndecset = [ '%.4E' ];
@@ -311,6 +355,7 @@ disp(' ');
 disp('Asymmetric Gaussian plug parameters:');
 dd = DispAGPars(mtht, ptp, kppars0, kppars1, []);
 disp(' ');
+%}
 
 %beep on
 %beep
@@ -422,7 +467,7 @@ end % if
 % Inversion
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 if (iopt > 1)
-	disp([ 'Execution of the ', InverterName(iopt), ' inverter for ~', num2str(iopttime(iopt)/60, '%.2f'), ' mins until ~', Min2Time(iopttime(iopt)/60), '...' ]);
+	%disp([ 'Execution of the ', InverterName(iopt), ' inverter for ~', num2str(iopttime(iopt)/60, '%.2f'), ' mins until ~', Min2Time(iopttime(iopt)/60), '...' ]);
 end
 r3 = tic;
 %kppars1 = kppars; % Initial asym. Gaussian plug parameter estimates.
@@ -435,12 +480,14 @@ runtime = r4/rsin;
 lipdiv = 1;
 lipmin = ntrymin/lipdiv;
 lippts = round(ntry/lipdiv);
-disp([ 'Estimating the local Lipschitz constant for ~', num2str(lipmin, '%.2f'), ' mins until ~', Min2Time(lipmin), '...' ]);
+%disp([ 'Estimating the local Lipschitz constant for ~', num2str(lipmin, '%.2f'), ' mins until ~', Min2Time(lipmin), '...' ]);
 
 [ locL, kerr ] = LocLipCon(kppars2, lippts, 10, Metric, LpC0, relI, mth1, mth2, ptp, I, J);
 %__________________________________________________________________________________________
 % Output
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+%{
+
 disp(' ');
 disp('Kinetic rate constants:');
 if (mtht == 1)
@@ -487,15 +534,24 @@ end
 disp([ 'Relative error of the approximating signal = ', num2str(100*frerr2, '%.2E'), '%' ]);
 disp([ 'Absolute error of the approximating signal = ', num2str(100*frerr2*mLpC0, '%.2E') ]);
 disp([ 'Inverter runtime = ', num2str(MyRound(r4, 2)), ' secs = ', num2str(MyRound(r4/60, 2)), ' mins = ', num2str(MyRound(runtime/100000, 2)), 'E5 x runtime(sin)' ])
+%}
 sz = size(krec);
-disp([ 'Error evaluations (direct solver runs) = ', num2str(kEnum), ' + ', num2str(sz(1)-kEnum), ' = ', num2str(sz(1)) ]);
+%disp([ 'Error evaluations (direct solver runs) = ', num2str(kEnum), ' + ', num2str(sz(1)-kEnum), ' = ', num2str(sz(1)) ]);
 
+%{
 beep on
 beep
 beep off
+%}
+
+inlipint = (kon0 < kon2 + kerr(1)) && (koff0 < koff2 + kerr(2));
+outcoll = [ log10(kon0), kon0, koff0, kon1, koff1, kon2, koff2, 100*abs(kon2-kon0)/kon0, 100*abs(koff2-koff0)/koff0, kerr(1), kerr(2), locL, inlipint, 100*frerr2, sz(1), convd ];
+parcoll = [ parcoll; cntcoll, outcoll ];
 %__________________________________________________________________________________________
 % Plotting
 %‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+%{
+
 disp(' ');
 disp('Plotting:')
 
@@ -602,3 +658,19 @@ end
 disp(' ');
 disp('Finished.')
 disp(' ');
+
+%}
+
+% End of the grand loop:
+end
+end
+
+% Data export:
+xlswrite('out', parcoll, 1, 'A1');
+
+% End beep:
+beep on
+beep
+beep off
+
+res = 1;

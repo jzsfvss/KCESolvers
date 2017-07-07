@@ -6,6 +6,9 @@ global iopttime
 global rtrat
 global rdirsol
 global numtdiv
+global srrerr
+
+irerr = srrerr;
 
 if (ropts == 2) % Request runtime options.
 
@@ -28,7 +31,7 @@ case num2cell(gI)
 		acc = input('Required number of decimal places = ');
 		rerr = 0;
 	else
-		rerr = input('Required relative error (recommended < 0.001%) = ');
+		rerr = input([ 'Required relative error (recommended < ', num2str(irerr), '%) = ' ]);
 		rerr = rerr/100;
 		acc = 0;
 	end
@@ -60,7 +63,7 @@ otherwise
 	%numtdiv = 1;
 end
 %numtdiv = [ 0, numests, 1, 2*numests, 1, 1, 1, 1, numests ];
-numtdiv = [ 0, 2.25*(numests/3), 1, 2*numests, 1, 1, 1, 1, numests, numests, 2*numests, 1, 1, 1, 1 ];
+numtdiv = [ 0, 2.25*(numests/3), 1, 2*numests, 1, 1, 1, 1, numests, numests, 2*numests, 1, 1, 1, 1, 1, 1 ];
 
 if ((IsIn(iopt, gI) && (iopt < 5)) || (iopt >= 9))
 	ntrymin = input('Total time for generating test points (recommended > 2 mins) = ');
@@ -95,7 +98,7 @@ useL = 0;
 switch (iopt)
 case num2cell(gI)
 	%disp('Required relative error to the signal: 0.0001%');
-	rerr = (1E-3)/100;
+	rerr = irerr/100;
 	acc = 0;
 otherwise
 	acc = 0;
@@ -147,7 +150,7 @@ otherwise
 	%numtdiv = 1;
 end
 %numtdiv = [ 0, 4, 1, 2*numests, 1, 1, 1, 1, numests ];
-numtdiv = [ 0, 2.25*(numests/3), 1, 2*numests, 1, 1, 1, 1, numests, numests, 2*numests, 1, 1, 1, 1 ];
+numtdiv = [ 0, 2.25*(numests/3), 1, 2*numests, 1, 1, 1, 1, numests, numests, 2*numests, 1, 1, 1, 1, 1, 1 ];
 
 if (useL)
 	ndec = acc + 1;
